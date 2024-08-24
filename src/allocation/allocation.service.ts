@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAllocationDto } from './dto/create-allocation.dto';
-import { UpdateAllocationDto } from './dto/update-allocation.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Allocation } from './entities/allocation.entity';
 
 @Injectable()
 export class AllocationService {
-  create(createAllocationDto: CreateAllocationDto) {
-    return 'This action adds a new allocation';
+  constructor(
+    @InjectRepository(Allocation)
+    private readonly allocationRepository: Repository<Allocation>,
+  ) {}
+
+  async create(createAllocationDto: Partial<Allocation>): Promise<Allocation> {
+    const allocation = this.allocationRepository.create(createAllocationDto);
+    return this.allocationRepository.save(allocation);
   }
 
-  findAll() {
-    return `This action returns all allocation`;
+  async findAll(): Promise<Allocation[]> {
+    return this.allocationRepository.find({ relations: ['source', 'region'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} allocation`;
+  async findOne(id: number): Promise<Allocation> {
+    return this.allocationRepository.findOne({where: { id }, relations: ['source', 'region'],});
   }
 
-  update(id: number, updateAllocationDto: UpdateAllocationDto) {
-    return `This action updates a #${id} allocation`;
+  async update(id: number, updateAllocationDto: Partial<Allocation>): Promise<Allocation> {
+    await this.allocationRepository.update(id, updateAllocationDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} allocation`;
+  async remove(id: number): Promise<void> {
+    await this.allocationRepository.delete(id);
   }
 }

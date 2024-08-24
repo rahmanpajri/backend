@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { DepositsService } from './deposits.service';
+import { Controller, Post, Get, Param, Body, Put, Delete } from '@nestjs/common';
 import { CreateDepositDto } from './dto/create-deposit.dto';
 import { UpdateDepositDto } from './dto/update-deposit.dto';
+import { DepositsService } from './deposits.service';
 
 @Controller('deposits')
-export class DepositsController {
-  constructor(private readonly depositsService: DepositsService) {}
+export class DepositController {
+  constructor(private readonly depositService: DepositsService) {}
 
   @Post()
-  create(@Body() createDepositDto: CreateDepositDto) {
-    return this.depositsService.create(createDepositDto);
+  async create(@Body() createDepositDto: CreateDepositDto) {
+    return this.depositService.create(createDepositDto);
   }
 
   @Get()
-  findAll() {
-    return this.depositsService.findAll();
+  async findAll() {
+    return this.depositService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.depositsService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    return this.depositService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDepositDto: UpdateDepositDto) {
-    return this.depositsService.update(+id, updateDepositDto);
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() updateDepositDto: UpdateDepositDto) {
+    return this.depositService.update(id, updateDepositDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.depositsService.remove(+id);
+  async remove(@Param('id') id: number) {
+    return this.depositService.remove(id);
   }
 }

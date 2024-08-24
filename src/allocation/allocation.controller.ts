@@ -1,14 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { AllocationService } from './allocation.service';
-import { CreateAllocationDto } from './dto/create-allocation.dto';
-import { UpdateAllocationDto } from './dto/update-allocation.dto';
+import { Allocation } from './entities/allocation.entity';
 
-@Controller('allocation')
+@Controller('allocations')
 export class AllocationController {
   constructor(private readonly allocationService: AllocationService) {}
 
   @Post()
-  create(@Body() createAllocationDto: CreateAllocationDto) {
+  create(@Body() createAllocationDto: Partial<Allocation>) {
     return this.allocationService.create(createAllocationDto);
   }
 
@@ -18,17 +17,17 @@ export class AllocationController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.allocationService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.allocationService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAllocationDto: UpdateAllocationDto) {
-    return this.allocationService.update(+id, updateAllocationDto);
+  @Put(':id')
+  update(@Param('id') id: number, @Body() updateAllocationDto: Partial<Allocation>) {
+    return this.allocationService.update(id, updateAllocationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.allocationService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.allocationService.remove(id);
   }
 }

@@ -1,34 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { RegionService } from './region.service';
-import { CreateRegionDto } from './dto/create-region.dto';
-import { UpdateRegionDto } from './dto/update-region.dto';
+import { Region } from './entities/region.entity';
 
-@Controller('region')
+@Controller('regions')
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
   @Post()
-  create(@Body() createRegionDto: CreateRegionDto) {
-    return this.regionService.create(createRegionDto);
+  async create(@Body() region: Partial<Region>): Promise<Region> {
+    return this.regionService.create(region);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<Region[]> {
     return this.regionService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.regionService.findOne(+id);
+  async findOne(@Param('id') id: number): Promise<Region> {
+    return this.regionService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRegionDto: UpdateRegionDto) {
-    return this.regionService.update(+id, updateRegionDto);
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() region: Partial<Region>): Promise<Region> {
+    return this.regionService.update(id, region);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.regionService.remove(+id);
+  async remove(@Param('id') id: number): Promise<void> {
+    return this.regionService.remove(id);
   }
 }

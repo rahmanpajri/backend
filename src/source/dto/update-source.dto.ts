@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSourceDto } from './create-source.dto';
+import { IsOptional, IsString } from 'class-validator';
+import { Category } from 'src/category/entities/category.entity';
 
-export class UpdateSourceDto extends PartialType(CreateSourceDto) {}
+export class UpdateSourceDto {
+  @IsOptional()
+  @IsString()
+  sourceName?: string;
+
+  @IsOptional()
+  category?: Category;
+}

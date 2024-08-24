@@ -1,26 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRegionDto } from './dto/create-region.dto';
-import { UpdateRegionDto } from './dto/update-region.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Region } from './entities/region.entity';
 
 @Injectable()
 export class RegionService {
-  create(createRegionDto: CreateRegionDto) {
-    return 'This action adds a new region';
+  constructor(
+    @InjectRepository(Region)
+    private readonly regionRepository: Repository<Region>,
+  ) {}
+
+  async create(region: Partial<Region>): Promise<Region> {
+    const newRegion = this.regionRepository.create(region);
+    return this.regionRepository.save(newRegion);
   }
 
-  findAll() {
-    return `This action returns all region`;
+  async findAll(): Promise<Region[]> {
+    return this.regionRepository.find({ relations: ['allocations'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} region`;
+  async findOne(id: number): Promise<Region> {
+    return this.regionRepository.findOne({where: { id }, relations: ['allocations'],});
   }
 
-  update(id: number, updateRegionDto: UpdateRegionDto) {
-    return `This action updates a #${id} region`;
+  async update(id: number, region: Partial<Region>): Promise<Region> {
+    await this.regionRepository.update(id, region);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} region`;
+  async remove(id: number): Promise<void> {
+    await this.regionRepository.delete(id);
   }
 }

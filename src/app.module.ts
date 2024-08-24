@@ -9,6 +9,7 @@ import { SourceModule } from './source/source.module';
 import { CategoryModule } from './category/category.module';
 import { AllocationModule } from './allocation/allocation.module';
 import { ConfigModule } from '@nestjs/config';
+import { TokenBlacklistModule } from './token-blacklist/token-blacklist.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ConfigModule } from '@nestjs/config';
     SourceModule,
     CategoryModule,
     AllocationModule,
+    TokenBlacklistModule
   ],
   controllers: [],
   providers: [],

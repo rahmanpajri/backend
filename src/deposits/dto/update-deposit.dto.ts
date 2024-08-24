@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateDepositDto } from './create-deposit.dto';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
-export class UpdateDepositDto extends PartialType(CreateDepositDto) {}
+export class UpdateDepositDto {
+  @IsInt()
+  @IsOptional()
+  month?: number;
+
+  @IsInt()
+  @IsOptional()
+  year?: number;
+
+  @IsNumber()
+  @IsOptional()
+  amount?: number;
+}

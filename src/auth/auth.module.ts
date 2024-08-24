@@ -7,10 +7,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { TokenBlacklistModule } from '../token-blacklist/token-blacklist.module';
 
 @Module({
   imports: [
     UsersModule,
+    TokenBlacklistModule, 
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Region } from './entities/region.entity';
 import { RegionService } from './region.service';
 import { RegionController } from './region.controller';
 
 @Module({
-  controllers: [RegionController],
+  imports: [TypeOrmModule.forFeature([Region])],
   providers: [RegionService],
+  controllers: [RegionController],
 })
 export class RegionModule {}

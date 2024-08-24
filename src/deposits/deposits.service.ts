@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateDepositDto } from './dto/create-deposit.dto';
 import { UpdateDepositDto } from './dto/update-deposit.dto';
+import { Deposit } from './entities/deposit.entity';
 
 @Injectable()
 export class DepositsService {
-  create(createDepositDto: CreateDepositDto) {
-    return 'This action adds a new deposit';
+  constructor(
+    @InjectRepository(Deposit)
+    private readonly depositRepository: Repository<Deposit>,
+  ) {}
+
+  async create(createDepositDto: CreateDepositDto): Promise<Deposit> {
+    const deposit = this.depositRepository.create(createDepositDto);
+    return this.depositRepository.save(deposit);
   }
 
-  findAll() {
-    return `This action returns all deposits`;
+  async findAll(): Promise<Deposit[]> {
+    return this.depositRepository.find({ relations: ['source'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} deposit`;
+  async findOne(id: number): Promise<Deposit> {
+    return this.depositRepository.findOne({where: { id },relations: ['source'],});
   }
 
-  update(id: number, updateDepositDto: UpdateDepositDto) {
-    return `This action updates a #${id} deposit`;
+  async update(id: number, updateDepositDto: UpdateDepositDto): Promise<Deposit> {
+    await this.depositRepository.update(id, updateDepositDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} deposit`;
+  async remove(id: number): Promise<void> {
+    await this.depositRepository.delete(id);
   }
 }
