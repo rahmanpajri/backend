@@ -16,16 +16,16 @@ export class AllocationService {
   }
 
   async findAll(): Promise<Allocation[]> {
-    return this.allocationRepository.find({ relations: ['source', 'region'] });
+    return this.allocationRepository.find();
   }
 
   async findOne(id: number): Promise<Allocation> {
-    return this.allocationRepository.findOne({where: { id }, relations: ['source', 'region'],});
+    return this.allocationRepository.findOneBy({ id });
   }
 
   async update(id: number, updateAllocationDto: Partial<Allocation>): Promise<Allocation> {
     await this.allocationRepository.update(id, updateAllocationDto);
-    return this.findOne(id);
+    return this.allocationRepository.findOneBy({ id });
   }
 
   async remove(id: number): Promise<void> {
