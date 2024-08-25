@@ -16,6 +16,11 @@ export class AllocationController {
     return this.allocationService.findAll();
   }
 
+  @Get('new')
+  async newId() {
+    return this.allocationService.getNewId();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.allocationService.findOne(id);

@@ -91,7 +91,6 @@ async update(id: number, updateSourceDto: any) {
   }
   source.category = category;
 
-  // Handle allocations
   const updatedAllocations = await Promise.all(
     updateSourceDto.allocations.map(async (allocationDto: any) => {
       const regionId = Number(allocationDto.region.id);
@@ -113,25 +112,24 @@ async update(id: number, updateSourceDto: any) {
     })
   );
 
-  const allocationIdsToKeep = updatedAllocations.map(a => a.id);
+  const allocationIdsToKeep = updatedAllocations.map(a => a.id).filter(id => id !== undefined);
+  
   const allocationsToRemove = source.allocations.filter(a => !allocationIdsToKeep.includes(a.id));
-  await this.allocationRepository.remove(allocationsToRemove);
+  if (allocationsToRemove.length > 0) {
+    await this.allocationRepository.remove(allocationsToRemove);
+  }
 
   await this.allocationRepository.save(updatedAllocations);
 
   return this.sourceRepository.save(source);
 }
 
-  
-
 async remove(id: number) {
   const source = await this.sourceRepository.findOne({ where: { id }, relations: ['allocations'] });
   if (!source) {
     throw new NotFoundException(`Source with ID ${id} not found`);
   }
-  // Hapus alokasi terkait
   await this.allocationRepository.delete({ source: { id } });
-  // Hapus source
   await this.sourceRepository.remove(source);
   return { deleted: true };
 }

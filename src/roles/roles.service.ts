@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
-import { Source } from './../source/entities/source.entity'; // Adjust the import path
+import { Source } from './../source/entities/source.entity';
 
 @Injectable()
 export class RolesService {

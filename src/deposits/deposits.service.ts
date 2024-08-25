@@ -15,13 +15,11 @@ export class DepositsService {
 
   async create(depositData: { userId: number, month: number, year: number, amount: number, source: number }): Promise<Deposit> {
     try {
-      // Fetch the source to ensure it exists
       const source = await this.sourceRepository.findOne({ where: { id: depositData.source } });
       if (!source) {
         throw new ForbiddenException('Source not found.');
       }
 
-      // Create and save the deposit
       const deposit = this.depositRepository.create({
         ...depositData,
         source
@@ -53,7 +51,6 @@ export class DepositsService {
         throw new ForbiddenException('Deposit not found.');
       }
   
-      // Update only the month, year, and amount fields
       deposit.month = updateData.month;
       deposit.year = updateData.year;
       deposit.amount = updateData.amount;
@@ -70,5 +67,19 @@ export class DepositsService {
     if (result.affected === 0) {
       throw new ForbiddenException('Deposit not found.');
     }
+  }
+
+  async findDistinctYears(): Promise<number[]> {
+    const deposits = await this.depositRepository.find();
+    const years = deposits.map(deposit => deposit.year);
+    const distinctYears = [...new Set(years)];
+    distinctYears.sort((a, b) => a - b);
+    return distinctYears;
+  }
+
+  async getDepositsReport(): Promise<Deposit[]> {
+    return this.depositRepository.find({
+      relations: ['source', 'source.allocations', 'source.allocations.region'],
+    });
   }
 }

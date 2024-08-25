@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.interface'; // Adjust path
+import { JwtPayload } from './jwt-payload.interface'; 
 
 @Injectable()
 export class JwtMiddleware implements NestMiddleware {
@@ -13,7 +13,7 @@ export class JwtMiddleware implements NestMiddleware {
       const token = authHeader.split(' ')[1];
       try {
         const decoded = this.jwtService.verify<JwtPayload>(token);
-        req.user = decoded; // Attach user info to request
+        req.user = decoded; 
       } catch (error) {
         console.error('Invalid token:', error);
       }

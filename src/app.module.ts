@@ -23,8 +23,8 @@ import { TokenBlacklistModule } from './token-blacklist/token-blacklist.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       options: {
-        encrypt: true,    // Gunakan encrypt jika server memerlukannya
-        trustServerCertificate: true, // Percayai sertifikat yang ditandatangani sendiri
+        encrypt: true,    
+        trustServerCertificate: true, 
       },
     }),
     ConfigModule.forRoot({

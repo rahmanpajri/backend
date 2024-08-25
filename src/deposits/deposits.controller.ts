@@ -8,7 +8,6 @@ export class DepositsController {
 
   @Post()
   async create(@Body() body: { userId: number, month: number, year: number, amount: number, source: { id: number } }): Promise<Deposit> {
-    // Ensure month, year, and amount are numbers
     const depositData = {
       userId: Number(body.userId),
       month: Number(body.month),
@@ -25,6 +24,16 @@ export class DepositsController {
     return this.depositsService.findAll();
   }
 
+  @Get('years')
+  async findYears() {
+    return this.depositsService.findDistinctYears();
+  }
+
+  @Get('report')
+  async getDepositsReport() {
+    return this.depositsService.getDepositsReport();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number): Promise<Deposit> {
     return this.depositsService.findOne(id);
@@ -32,7 +41,6 @@ export class DepositsController {
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() body: { month: number, year: number, amount: number }): Promise<Deposit> {
-    // Ensure month, year, and amount are numbers
     const updateData = {
       month: Number(body.month),
       year: Number(body.year),
