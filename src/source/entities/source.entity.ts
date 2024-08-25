@@ -1,6 +1,7 @@
 import { Allocation } from "src/allocation/entities/allocation.entity";
 import { Category } from "src/category/entities/category.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/roles/entities/role.entity";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Source {
@@ -15,4 +16,7 @@ export class Source {
 
   @OneToMany(() => Allocation, (allocation) => allocation.source)
   allocations: Allocation[];
+
+  @OneToOne(() => Role, (role) => role.source)
+  role: Role;
 }
