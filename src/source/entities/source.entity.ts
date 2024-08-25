@@ -1,7 +1,7 @@
 import { Allocation } from "src/allocation/entities/allocation.entity";
 import { Category } from "src/category/entities/category.entity";
 import { Role } from "src/roles/entities/role.entity";
-import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Source {
@@ -14,9 +14,9 @@ export class Source {
   @ManyToOne(() => Category, (category) => category.sources)
   category: Category;
 
-  @OneToMany(() => Allocation, (allocation) => allocation.source)
+  @OneToMany(() => Allocation, (allocation) => allocation.source, { cascade: true })
   allocations: Allocation[];
 
-  @OneToOne(() => Role, (role) => role.source)
-  role: Role;
+  @OneToMany(() => Role, (role) => role.source)
+  roles: Role[];
 }

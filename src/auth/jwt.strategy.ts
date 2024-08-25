@@ -1,4 +1,3 @@
-// jwt.strategy.ts
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
@@ -20,10 +19,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
+    // Check if the token is blacklisted
     const isBlacklisted = await this.tokenBlacklistService.isTokenBlacklisted(payload.sub.toString());
     if (isBlacklisted) {
       throw new UnauthorizedException('Token is blacklisted');
     }
-    return { userId: payload.sub, username: payload.username };
+
+    return { userId: payload.sub, username: payload.username, role: payload.role };
   }
 }

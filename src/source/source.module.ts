@@ -9,7 +9,7 @@ import { Allocation } from '../allocation/entities/allocation.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Source, Category, Region, Allocation]),
+    TypeOrmModule.forFeature([Source, Category, Region, Allocation]), 
   ],
   providers: [SourceService],
   controllers: [SourceController],

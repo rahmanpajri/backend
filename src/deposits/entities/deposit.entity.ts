@@ -15,6 +15,6 @@ export class Deposit {
   @Column('decimal', { precision: 12, scale: 2 })
   amount: number;
 
-  @ManyToOne(() => Source, (source) => source.id)
+  @ManyToOne(() => Source, (source) => source.roles)
   source: Source;
 }

@@ -1,34 +1,41 @@
-// source.controller.ts
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Put, Delete, Body, Param, NotFoundException} from '@nestjs/common';
 import { SourceService } from './source.service';
-import { Source } from './entities/source.entity';
+import { CreateSourceDto } from './dto/create-source.dto';
+import { UpdateSourceDto } from './dto/update-source.dto';
 
 @Controller('sources')
 export class SourceController {
   constructor(private readonly sourceService: SourceService) {}
 
-  @Post()
-  create(@Body() createSourceDto: any) {
-    return this.sourceService.create(createSourceDto);
-  }
-
   @Get()
-  findAll() {
+  async findAll() {
     return this.sourceService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.sourceService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const source = await this.sourceService.findOne(+id);
+    if (!source) {
+      throw new NotFoundException('Source not found');
+    }
+    return source;
+  }
+
+  @Post()
+  async create(@Body() createSourceDto: CreateSourceDto) {
+    return this.sourceService.create(createSourceDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() updateSourceDto: any) {
-    return this.sourceService.update(id, updateSourceDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateSourceDto: UpdateSourceDto,
+  ) {
+    return this.sourceService.update(+id, updateSourceDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.sourceService.remove(id);
+  async remove(@Param('id') id: string) {
+    return this.sourceService.remove(+id);
   }
 }
